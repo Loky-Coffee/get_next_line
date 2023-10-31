@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 05:00:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2023/10/31 01:28:18 by aalatzas         ###   ########.fr       */
+/*   Updated: 2023/10/31 11:33:22 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,31 @@ char	*ft_strchr(const char *s, int c)
 
 char	*greateline(int fd, char *everline)
 {
-	int	i;
+	int		i;
+	char	*buffer;
 
-	i = 1;
-	everline = malloc(BUFFER_SIZE + 1);
-	while (i)
+	while (1)
 	{
-		if (ft_strchr(everline, '\n') != NULL)
-			break ;
-		i = read(fd, everline, BUFFER_SIZE);
-		everline[i] = '\0';
-		if (i <= 0)
+		buffer = ft_calloc(BUFFER_SIZE + 1, 1);
+		if (!buffer)
+			return (NULL);
+		i = read(fd, buffer, BUFFER_SIZE);
+		if (i < 0)
+		{
+			free (buffer);
+			return (NULL);
+		}
+		buffer[i] = '\0';
+		if ((i <= 0) || (ft_strchr(buffer, '\0') == NULL))
+		{
+			if ((i <= 0))
+				return (ft_strjoin(everline, buffer));
+			free(buffer);
+			return (0);
+		}
+		if (i > 0)
+			everline = ft_strjoin(everline, buffer);
+		if (i <= 0 || ft_strchr(buffer, '\n') != NULL)
 			break ;
 	}
 	return (everline);
@@ -46,22 +60,21 @@ char	*greateline(int fd, char *everline)
 char	*cutline(char *everline, char *newline)
 {
 	int	i;
-	int	j;
 	int	o;
 
 	o = 0;
 	i = 0;
-	while (everline[i] != '\n')
+	while (everline[i] != '\0')
 		i++;
-	j = i;
 	newline = malloc(i + 1 * sizeof(char));
-	while (i > 0)
+	if (!newline)
+		return (NULL);
+	while (o < i && everline != NULL)
 	{
 		newline[o] = everline[o];
 		o++;
-		i--;
 	}
-	newline[ft_strlen(newline) + 1] = '\0';
+	newline[o] = '\0';
 	return (newline);
 }
 
@@ -75,7 +88,6 @@ char	*updateeverline(char *everline)
 		ft_strlen(newline_position + 1) + 1);
 	else
 		everline[0] = '\0';
-	printf("\neverline IST 2: \n%s", everline);
 	return (everline);
 }
 
@@ -84,9 +96,20 @@ char	*get_next_line(int fd)
 	static char	*everline;
 	char		*newline;
 
-	if (fd < 0 || read(fd, 0, 0))
-		return (0);
+	newline = NULL;
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	{
+		if (everline)
+		{
+			free (everline);
+			everline = NULL;
+		}
+		return (NULL);
+	}
+
 	everline = greateline(fd, everline);
+	if (!everline)
+		exit(0);
 	newline = cutline(everline, newline);
 	everline = updateeverline(everline);
 	return (newline);
@@ -94,12 +117,31 @@ char	*get_next_line(int fd)
 
 // int main(void)
 // {
-// 	char *a;
+// 	static int fd = -1;
+// 	char *line;
 
-// 	int i;
-// 	i = open("text.txt", O_RDONLY);
-// 	a = get_next_line(i);
-// 	printf("The Line: \n%s", a);
-// 	close(i);
-// 	return (0);
+// 	if (fd == -1)
+// 	{
+// 		fd = open("text.txt", O_RDONLY);
+// 		if (fd == -1)
+// 		{
+// 			perror("Error opening the file");
+// 			return 1;
+// 		}
+// 	}
+// 	line = get_next_line(fd);
+// 	printf("\nThe Line ------>: %s\n", line);
+// 	while (line)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("\nThe Line ------->: %s\n", line);
+// 	}
+// 	if (line == NULL)
+// 	{
+// 		close(fd);
+// 		fd = -1;
+// 		return 0;
+// 	}
+// 	free(line);
+// 	return 0;
 // }

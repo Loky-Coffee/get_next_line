@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 05:00:27 by aalatzas          #+#    #+#             */
-/*   Updated: 2023/10/31 01:28:09 by aalatzas         ###   ########.fr       */
+/*   Updated: 2023/10/31 10:46:11 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*newstr;
 	size_t	maxlen;
-
 	maxlen = ft_strlen(s1) + ft_strlen(s2) + 1;
 	newstr = ft_calloc(maxlen, 1);
-	if (!newstr)
-		return (NULL);
 	ft_strlcat(newstr, s1, ft_strlen(s1) + 1);
 	ft_strlcat(newstr, s2, maxlen);
+	if (!newstr[0])
+		return NULL;
 	return (newstr);
 }
 
