@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 05:00:33 by aalatzas          #+#    #+#             */
-/*   Updated: 2023/10/31 08:45:54 by aalatzas         ###   ########.fr       */
+/*   Updated: 2023/10/31 17:24:12 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000000
+#  define BUFFER_SIZE 45
 # endif
 
 char	*get_next_line(int fd);

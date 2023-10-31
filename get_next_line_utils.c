@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 05:00:27 by aalatzas          #+#    #+#             */
-/*   Updated: 2023/10/31 10:46:11 by aalatzas         ###   ########.fr       */
+/*   Updated: 2023/10/31 17:22:43 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	*ft_calloc(size_t count, size_t size)
 	char		*str;
 
 	i = 0;
+	if (size != 0 && count > SIZE_MAX / size)
+		return NULL;
 	str = (char *)malloc(count * size);
 	if (str == NULL)
 		return (NULL);
