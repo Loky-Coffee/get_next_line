@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/27 05:00:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2023/11/01 22:39:28 by aalatzas         ###   ########.fr       */
+/*   Created: 2023/11/01 22:16:15 by aalatzas          #+#    #+#             */
+/*   Updated: 2023/11/01 22:38:51 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+
+#include "get_next_line_bonus.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -95,26 +96,26 @@ char	*updateeverline(char *everline)
 
 char	*get_next_line(int fd)
 {
-	static char	*everline = NULL;
+	static char	*everline[1024];
 	char		*newline;
 
 	newline = NULL;
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 	{
-		free (everline);
-		everline = NULL;
+		free (everline[fd]);
+		everline[fd] = NULL;
 		return (NULL);
 	}
-	everline = greateline(fd, everline);
-	if (!everline)
+	everline[fd] = greateline(fd, everline[fd]);
+	if (!everline[fd])
 		return (NULL);
-	newline = cutline(everline, newline);
+	newline = cutline(everline[fd], newline);
 	if (!newline)
 	{
-		free(everline);
-		everline = NULL;
+		free(everline[fd]);
+		everline[fd] = NULL;
 		return (NULL);
 	}
-	everline = updateeverline(everline);
+	everline[fd] = updateeverline(everline[fd]);
 	return (newline);
 }
